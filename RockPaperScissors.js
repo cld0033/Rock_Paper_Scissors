@@ -1,40 +1,58 @@
-//allows the computer to randomly make a choice.
-function getComputerChoice() {
-    const choices = ["rock", "paper", "scissors"];
-    const random = Math.floor(Math.random() * choices.length);
-    let opponentMove = choices[random]
-    return opponentMove;
-    }
-
+const choices = ['rock', 'paper', 'scissors'];
+const playerDisplay = document.getElementById('playerDisplay');
+const computerDisplay = document.getElementById('computerDisplay');
+const resultDisplay = document.getElementById('resultDisplay');
+const playerScoreDisplay = document.getElementById('playerScoreDisplay');
+const computerScoreDisplay = document.getElementById('computerScoreDisplay');
+let playerScore = 0;
+let computerScore = 0;
 
 //sets up 1 round of play.
-function playRound(playerSelection, computerSelection) {
+function playRound(playerChoice) {
+  const computerChoice = Math.floor(Math.random() * choices.length);
+  const computer = choices[computerChoice];
 
-   if (playerSelection === computerSelection) {
-        return "Tie!";
-    } 
-    else if (
-        (playerSelection === "rock" && computerSelection === "scissors") ||
-        (playerSelection === "paper" && computerSelection === "rock") ||
-        (playerSelection === "scissors" && computerSelection === "paper")
-    ) {
-        return "You Win! " + playerSelection + " Beats " + computerSelection;
-    } 
-    else {
-        return "You Lose! " + computerSelection + " Beats " + playerSelection;
+  let result = '';
+
+  if (playerChoice === computer) {
+    result = 'Its a Tie!';
+  } else {
+    switch (playerChoice) {
+      case 'rock':
+        result = computer === 'scissors' ? 'You Win!' : 'You Lose!';
+        break;
+      case 'paper':
+        result = computer === 'rock' ? 'You Win!' : 'You Lose!';
+        break;
+      case 'scissors':
+        result = computer === 'paper' ? 'You Win!' : 'You Lose!';
     }
+  }
+
+  playerDisplay.textContent = `Player: ${playerChoice}`;
+  computerDisplay.textContent = `Computer: ${computer}`;
+  resultDisplay.textContent = result;
+
+  resultDisplay.classList.remove('greenText', 'redText');
+
+  switch (result) {
+    case 'You Win!':
+      resultDisplay.classList.add('greenText');
+      playerScore++;
+      playerScoreDisplay.textContent = playerScore;
+      break;
+    case 'You Lose!':
+      resultDisplay.classList.add('redText');
+      computerScore++;
+      computerScoreDisplay.textContent = computerScore;
+      break;
+  }
 }
 
-//Sets up a game of 5 rounds.
-function playGame() {
+function reset() {
+  playerScore = 0;
+  playerScoreDisplay.textContent = playerScore;
 
-    for (let i = 1; i <= 5; i++) {
-        const playerChoice = prompt("Rock, Paper, Scissors?");
-        const playerSelection = playerChoice.toLowerCase();
-        const computerSelection = getComputerChoice();
-        let result = playRound(playerSelection, computerSelection);
-        alert("Round " + i + "\n" + result);
-    }
+  computerScore = 0;
+  computerScoreDisplay.textContent = computerScore;
 }
-
-playGame();
